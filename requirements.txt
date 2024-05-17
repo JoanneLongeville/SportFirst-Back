@@ -1,4 +1,5 @@
-Django # add backend framework as Flask (web)
-psycopg2-binary # PostgreSQL
+Django # backend framework
 psycopg2 # PostgreSQL
+psycopg2-binary # PostgreSQL
+sqlparse # PostgreSQL
 # add frontend framework connector
