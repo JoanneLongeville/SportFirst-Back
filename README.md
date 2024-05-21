@@ -19,10 +19,8 @@ Create Python environment :
     ``pip install poetry``
 
 Install dependencies: 
-
-    ``cd venv``
-
-    ``pip install -r requirements.txt``
+    cd venv
+    pip install -r requirements.txt
 
 Run python interpretor with terminal ``py<file.py>``
 
