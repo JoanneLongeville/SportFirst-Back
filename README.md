@@ -3,6 +3,7 @@
 # Start with Docker 
 
 ``docker build -t sportfirst-back .``
+
 ``docker compose up``
 
 # Start
