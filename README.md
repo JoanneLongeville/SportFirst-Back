@@ -2,9 +2,8 @@
 
 # Start with Docker 
 
-``docker build -t sportfirst-back .``
-
-``docker compose up``
+docker build -t sportfirst-back .
+docker compose up
 
 # Start with Windows
 
@@ -12,11 +11,9 @@ Python3.12.0
 
 Create Python environment : 
 
-    ``python -m venv venv``
-
-    ``venv/Scripts/activate``
-
-    ``pip install poetry``
+    python -m venv venv
+    venv/Scripts/activate
+    pip install poetry
 
 Install dependencies: 
 
