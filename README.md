@@ -2,8 +2,9 @@
 
 # Start with Docker 
 
-docker build -t sportfirst-back .
-docker compose up
+``docker build -t sportfirst-back .
+
+docker compose up``
 
 # Start with Windows
 
