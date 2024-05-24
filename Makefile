@@ -6,8 +6,8 @@ remove:
 	docker rm $(docker ps -a -q)
 	docker volume rm sportfirst-back_SportFirstVolume
 
-docker-up:
+dockup:
 	docker compose up
 
-docker-down:
+dockdown:
 	docker compose down
