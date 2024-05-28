@@ -1,4 +1,5 @@
 Django # backend framework
 psycopg2-binary # PostgreSQL
 sqlparse # PostgreSQL
-# add frontend framework connector
+bcrypt # password hashing
+getpass # password not visible
