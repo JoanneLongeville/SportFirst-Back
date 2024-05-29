@@ -8,21 +8,34 @@
 
 # Start with Windows
 
-Python3.12.0
+Requirements : Python3.12.0
 
 Create Python environment : 
 
     python -m venv venv
     venv/Scripts/activate
-    pip install poetry
 
 Install dependencies: 
 
-    cd venv
     pip install -r requirements.txt
 
 Run python interpretor with terminal ``py<file.py>``
 
+
+# Start with Linux
+
+Requirements : Python3.12.0
+
+Create Python environment : 
+
+    python -m venv venv
+    source venv/bin/activate
+
+Install dependencies: 
+
+    pip install -r requirements.txt
+
+Run python interpretor with terminal ``python <file.py>``
 
 
 ``docker ps`` to check if PostgreSQL is running.
