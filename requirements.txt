@@ -1,5 +1,5 @@
-Django # backend framework
-psycopg2-binary # PostgreSQL
+Flask # web framework
+Flask-RESTful # RESTful API
+psycopg2-binary # = psycopg2; PostgreSQL
 sqlparse # PostgreSQL
 bcrypt # password hashing
-getpass # password not visible
