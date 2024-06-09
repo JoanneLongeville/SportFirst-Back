@@ -14,5 +14,5 @@ RUN python -m pip install --upgrade pip --no-cache-dir -r requirements.txt
 EXPOSE 8080
 
 # Commande par défaut à exécuter lorsque le conteneur démarre
-CMD ["python", "main.py"]
+CMD ["python", "app/src/main.py"]
 
