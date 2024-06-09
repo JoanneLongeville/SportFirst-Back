@@ -1,69 +1,65 @@
 import psycopg2
 import bcrypt
-import getpass 
+import getpass
+from connectors.database import db_connection
 
+# POST
+def handle_register_post(data):
+    firstname = data.get('firstname')
+    lastname = data.get('lastname')
+    email = data.get('email')
+    phone = data.get('phone')
+    role = data.get('role')
+    password = data.get('password')
 
-def main():
-    print("Bienvenue sur SportFirst")
-    while True:
-        choice = input ("Cliquez sur Insciption pour vous inscrire, Connexion pour vous connecter ou Quitter pour quitter: ")
-        if choice == "Inscription":
-            register()
-        elif choice == "Connexion":
-            if login():
-                while True:
-                    command = input("Cliquez sur Déconnexion pour vous déconnecter").lower()
-                    if command == "Déconnexion":
-                        print("Déconnexion réussie")
-                        break
-        elif choice == "Quitter":
-            break
-        else:
-            print("Commande invalide")
-if __name__ == "__main__":
-    main()
-
-
-# Connexion à la base de données
-def db_connection(): 
-    conn = psycopg2.connect(user="postgres",
-                            password="admin",
-                            host="localhost",
-                            port="5432",
-                            database="sportfirst")
-    return conn
-
-# Ajout d'un utilisateur
-def register():
-    conn = db_connection()
-    cur = conn.cursor()
-
-    name = input("Entrez votre prénom: ")
-    last_name = input("Entrez votre prénom: ")
-    email = input("Entrez votre email: ")
-    phone_number = input("Entrez votre numéro de téléphone: ")
-    role = input(2)
-    password = getpass.getpass("Entrez votre mot de passe: ")
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
+    # Add user
     try:
-        cur.execute("INSERT INTO Users (name, last_name, email, password, phone_number, role) VALUES (%s, %s, %s, %s, %s, %s)", (name, last_name, email, hashed_password, phone_number, role))
+        conn = db_connection()
+        cur = conn.cursor()
+        cur.execute("INSERT INTO Users (firstname, lastname, email, password, phone, role) VALUES (%s, %s, %s, %s, %s, %s)", (firstname, lastname, email, hashed_password, phone, role))
         conn.commit()
-        print("Inscription réussie")
-    except psycopg2.IntegrityError as error:
-        print("Erreur lors de l'inscription, merci de contacter admin@sportfirst.com", error)
-        conn.rollback()
-    finally:
         cur.close()
-        conn.close()
 
-# Connexion d'un utilisateur
+        response_data = {'message': 'Registration successful'}
+        response_code = 201
+    except psycopg2.Error as error:
+        response_data = {'error': 'Registration error, please contact admin@sportfirst.com: ' + str(error)}
+        response_code = 500
+    return response_data, response_code
+
+# # Add user
+# def register():
+#     conn = db_connection()
+#     cur = conn.cursor()
+
+#     firstname = input("Entrez votre prénom: ")
+#     lastname = input("Entrez votre prénom: ")
+#     email = input("Entrez votre email: ")
+#     phone = input("Entrez votre numéro de téléphone: ")
+#     role = input(2)
+#     password = getpass.getpass("Entrez votre mot de passe: ")
+#     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+#     try:
+#         cur.execute("INSERT INTO Users (firstname, lastname, email, password, phone, role) VALUES (%s, %s, %s, %s, %s, %s)", (firstname, lastname, email, hashed_password, phone, role))
+#         conn.commit()
+#         print("Inscription réussie")
+#     except psycopg2.IntegrityError as error:
+#         print("Erreur lors de l'inscription, merci de contacter admin@sportfirst.com", error)
+#         conn.rollback()
+#     finally:
+#         cur.close()
+#         conn.close()
+
+# User login
 def login():
     conn = db_connection()
     cur = conn.cursor()
 
-    email = input("Entrez votre email: ")
-    password = getpass.getpass("Entrez votre mot de passe: ")
+    email = input("Enter your e-mail: ")
+    password = getpass.getpass("Enter your e-mail: ")
 
     cur.execute("SELECT password FROM Users WHERE email = %s", (email,))
     row = cur.fetchone()
@@ -75,10 +71,30 @@ def login():
         print("Hello {name}")
         return True
     else:
-        print("Email ou mot de passe incorrect")
+        print("Incorrect email or password")
         return False
     
-# Déconnexion d'un utilisateur
+# User logout
 def logout():
-    print("Déconnexion réussie")
+    print("Logout successful")
     return True
+
+def main():
+    print("welcome to SportFirst")
+    while True:
+        choice = input ("Click Register to register, Login to log in, or Logout to logout: ")
+        if choice == "Register":
+            handle_register_post()
+        elif choice == "Login":
+            if login():
+                while True:
+                    command = input("Click Logout to logout").lower()
+                    if command == "Logout":
+                        print("Logout successful")
+                        break
+        elif choice == "Logout":
+            break
+        else:
+            print("Invalid command")
+if __name__ == "__main__":
+    main()
