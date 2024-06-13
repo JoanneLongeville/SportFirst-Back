@@ -3,6 +3,7 @@ import bcrypt
 import getpass
 from connectors.database import db_connection
 
+
 # POST
 def handle_register_post(data):
     firstname = data.get('firstname')
@@ -18,42 +19,20 @@ def handle_register_post(data):
     try:
         conn = db_connection()
         cur = conn.cursor()
-        cur.execute("INSERT INTO Users (firstname, lastname, email, password, phone, role) VALUES (%s, %s, %s, %s, %s, %s)", (firstname, lastname, email, hashed_password, phone, role))
+        cur.execute("INSERT INTO Users (firstname, lastname, email, password, phone, role) VALUES (%s, %s, %s, %s, %s, %s)",
+                    (firstname, lastname, email, hashed_password, phone, role))
         conn.commit()
         cur.close()
 
         response_data = {'message': 'Registration successful'}
         response_code = 201
     except psycopg2.Error as error:
-        response_data = {'error': 'Registration error, please contact admin@sportfirst.com: ' + str(error)}
+        response_data = {'error':
+                         'Registration error, please contact admin@sportfirst.com: ' + str(error)}
         response_code = 500
     return response_data, response_code
 
-# # Add user
-# def register():
-#     conn = db_connection()
-#     cur = conn.cursor()
 
-#     firstname = input("Entrez votre prénom: ")
-#     lastname = input("Entrez votre prénom: ")
-#     email = input("Entrez votre email: ")
-#     phone = input("Entrez votre numéro de téléphone: ")
-#     role = input(2)
-#     password = getpass.getpass("Entrez votre mot de passe: ")
-#     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
-#     try:
-#         cur.execute("INSERT INTO Users (firstname, lastname, email, password, phone, role) VALUES (%s, %s, %s, %s, %s, %s)", (firstname, lastname, email, hashed_password, phone, role))
-#         conn.commit()
-#         print("Inscription réussie")
-#     except psycopg2.IntegrityError as error:
-#         print("Erreur lors de l'inscription, merci de contacter admin@sportfirst.com", error)
-#         conn.rollback()
-#     finally:
-#         cur.close()
-#         conn.close()
-
-# User login
 def login():
     conn = db_connection()
     cur = conn.cursor()
@@ -73,16 +52,18 @@ def login():
     else:
         print("Incorrect email or password")
         return False
-    
+
+
 # User logout
 def logout():
     print("Logout successful")
     return True
 
+
 def main():
     print("welcome to SportFirst")
     while True:
-        choice = input ("Click Register to register, Login to log in, or Logout to logout: ")
+        choice = input("Click Register to register, Login to log in, or Logout to logout: ")
         if choice == "Register":
             handle_register_post()
         elif choice == "Login":
@@ -96,5 +77,7 @@ def main():
             break
         else:
             print("Invalid command")
+
+
 if __name__ == "__main__":
     main()
