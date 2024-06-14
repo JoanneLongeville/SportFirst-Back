@@ -13,7 +13,7 @@ Requirements : Python3.12.0
 Create Python environment :
 
     python -m venv venv
-    venv/Scripts/activate
+    source venv/Scripts/activate
 
 Install dependencies:
 
