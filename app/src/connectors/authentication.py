@@ -51,20 +51,24 @@ def handle_login_post(data):
         cur = conn.cursor()
 
         # Execute SQL request
-        cur.execute("SELECT password FROM Users WHERE email = %s", (email,))
+        cur.execute("SELECT user_id, firstname, password FROM Users "
+                    "WHERE email = %s", (email,))
         resultat = cur.fetchone()
 
         if resultat:
+            # Get user_id, firstname and hashed password from DB
+            user_id, firstname, hashed_password = resultat
 
             # Get hashed password from DB
-            hashed_password = resultat[0]
+            # hashed_password = resultat[0]
             logging.warning(type(password))
             logging.warning(type(hashed_password))
 
             # Check if password is correct
             if bcrypt.checkpw(password.encode('utf-8'),
                               hashed_password.encode('utf-8')):
-                response_data = {'message': 'Matching informations'}
+                response_data = {'message': 'Matching informations',
+                                 'userFirstname': firstname, 'userID': user_id}
                 response_code = 200
             else:
                 response_data = {'message': 'Invalid email or password'}
