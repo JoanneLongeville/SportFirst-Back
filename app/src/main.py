@@ -1,5 +1,5 @@
 from connectors import database
-from connectors.authentication import handle_register_post
+from connectors.authentication import handle_register_post, handle_login_post
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
@@ -16,7 +16,15 @@ class AccountResource(Resource):
         return response_data, response_code
 
 
+class LoginRessource(Resource):
+    def post(self):
+        data = request.get_json()
+        response_data, response_code = handle_login_post(data)
+        return response_data, response_code
+
+
 api.add_resource(AccountResource, '/accounts')
+api.add_resource(LoginRessource, '/login')
 
 if __name__ == "__main__":
     database.create_table()

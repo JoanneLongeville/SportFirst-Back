@@ -3,3 +3,4 @@ Flask-RESTful # RESTful API
 psycopg2-binary # = psycopg2; PostgreSQL
 sqlparse # PostgreSQL
 bcrypt # password hashing
+logging # logging

@@ -1,5 +1,10 @@
 # SportFirst-Back
 
+## Run the app
+
+docker compose up
+python app/src/main.py
+
 ## Start with Docker
 
 ``docker build -t sportfirst-back .``
