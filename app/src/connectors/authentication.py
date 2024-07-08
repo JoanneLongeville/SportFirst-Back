@@ -105,6 +105,46 @@ def handle_login_post(data):
     return response_data, response_code
 
 
+def handle_profile_get(data):
+    user_id = data.get('user_id')
+
+    try:
+        conn = db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT user_id, firstname, lastname, email, phone "
+                    "WHERE user_id = %s", (user_id,))
+        resultat = cur.fetchone()
+
+        if resultat:
+            user_id, firstname, lastname, email, phone = resultat
+            response_data = {
+                'userID': user_id,
+                'userFirstname': firstname,
+                'userLastname': lastname,
+                'userEmail': email,
+                'userPhone': phone
+            }
+            response_code = 200
+        else:
+            response_data = {'message': 'User not found'}
+            response_code = 404
+
+        conn.commit()
+        cur.close()
+
+    except psycopg2.Error as error:
+        response_data = {'error': 'Profile retrieval error: ' + str(error)}
+        response_code = 500
+    except ValueError as ve:
+        response_data = {'error': 'ValueError: ' + str(ve)}
+        response_code = 500
+    except TypeError as te:
+        response_data = {'error': 'TypeError: ' + str(te)}
+        response_code = 500
+
+    return response_data, response_code
+
+
 def login():
     conn = db_connection()
     cur = conn.cursor()
