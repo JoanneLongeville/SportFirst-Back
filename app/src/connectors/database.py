@@ -26,16 +26,7 @@ def create_table():
             lastname TEXT NOT NULL,
             email TEXT NOT NULL,
             password TEXT NOT NULL,
-            phone TEXT NOT NULL,
-            role TEXT
-            ) '''
-
-        create_roles_table = '''
-            CREATE TABLE IF NOT EXISTS Roles (
-            role_id SERIAL PRIMARY KEY,
-            role TEXT NOT NULL,
-            user_Id INT NOT NULL,
-            FOREIGN KEY (user_id) REFERENCES Users(user_id)
+            phone TEXT NOT NULL
             ) '''
 
         create_sessions_table = '''
@@ -58,13 +49,12 @@ def create_table():
 
         # Execute SQL command
         cur.execute(create_users_table)
-        cur.execute(create_roles_table)
         cur.execute(create_sessions_table)
         cur.execute(create_availabilities_table)
 
         # Validate changes
         conn.commit()
-        print("Tables 'Users','Roles','Sessions','Availabilities' created")
+        print("Tables 'Users','Sessions','Availabilities' created")
 
         # Close database connection
         cur.close()
