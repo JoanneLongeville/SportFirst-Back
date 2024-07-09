@@ -1,6 +1,7 @@
 from connectors import database
 from connectors.authentication import handle_register_post, handle_login_post
 from connectors.authentication import handle_profile_get
+from connectors.calendar import handle_reservation_post
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
@@ -24,6 +25,13 @@ class LoginRessource(Resource):
         return response_data, response_code
 
 
+class ReservationRessource(Resource):
+    def post(self):
+        data = request.get_json()
+        response_data, response_code = handle_reservation_post(data)
+        return response_data, response_code
+
+
 class ReadResource(Resource):
     def get(self):
         data = request.get_json()
@@ -34,6 +42,7 @@ class ReadResource(Resource):
 api.add_resource(AccountResource, '/accounts')
 api.add_resource(LoginRessource, '/login')
 api.add_resource(ReadResource, '/profile')
+api.add_resource(ReservationRessource, '/reservations')
 
 if __name__ == "__main__":
     database.create_table()
