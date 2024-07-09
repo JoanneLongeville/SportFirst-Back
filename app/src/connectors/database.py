@@ -26,7 +26,8 @@ def create_table():
             lastname TEXT NOT NULL,
             email TEXT NOT NULL,
             password TEXT NOT NULL,
-            phone TEXT NOT NULL
+            phone TEXT NOT NULL,
+            role TEXT
             ) '''
 
         create_sessions_table = '''
