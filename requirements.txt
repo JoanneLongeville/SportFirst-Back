@@ -6,3 +6,4 @@ bcrypt # password hashing
 logging # logging
 pytest # testing
 gunicorn # render
+connectors # for pytest
