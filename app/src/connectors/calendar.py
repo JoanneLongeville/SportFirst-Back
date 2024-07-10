@@ -1,5 +1,5 @@
 import psycopg2
-from connectors.database import db_connection
+from .database import db_connection
 from datetime import datetime
 import logging
 
