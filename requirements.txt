@@ -1,6 +1,6 @@
 Flask # web framework
 Flask-RESTful # RESTful API
-psycopg2-binary # = psycopg2; PostgreSQL
+psycopg2-binary # = psycopg2; connection to PostgreSQL
 sqlparse # PostgreSQL
 bcrypt # password hashing
 logging # logging
