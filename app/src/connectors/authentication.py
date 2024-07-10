@@ -1,7 +1,7 @@
 import psycopg2
 import bcrypt
 import getpass
-from connectors.database import db_connection
+from .database import db_connection
 import logging
 
 
