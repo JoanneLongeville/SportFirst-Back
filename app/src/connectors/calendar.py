@@ -6,9 +6,9 @@ import logging
 
 # POST Reservation
 def handle_reservation_post(data):
-    start_date_time = data.get('start_date_time')
-    end_date_time = data.get('end_date_time')
-    user_id = data.get('user_id')
+    start_date_time = data.get('start')
+    end_date_time = data.get('end')
+    user_id = data.get('userId')
     logging.warning("Reservation request: " + str(data))
 
     if not all([start_date_time, end_date_time, user_id]):
@@ -23,9 +23,8 @@ def handle_reservation_post(data):
 
     # Verify date format
     try:
-        start_date_time = datetime.strptime(start_date_time,
-                                            '%Y-%m-%d %H:%M:%S')
-        end_date_time = datetime.strptime(end_date_time, '%Y-%m-%d %H:%M:%S')
+        start_date_time = datetime.fromisoformat(start_date_time)
+        end_date_time = datetime.fromisoformat(end_date_time)
 
     except ValueError as error:
         return {'error': 'Date format error: ' + str(error)}, 400
