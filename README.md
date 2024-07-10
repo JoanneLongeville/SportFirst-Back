@@ -5,6 +5,10 @@
 docker compose up
 python app/src/main.py
 
+## Tests
+
+py -v
+
 ## Start with Docker
 
 ``docker build -t sportfirst-back .``
