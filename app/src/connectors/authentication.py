@@ -14,28 +14,43 @@ def handle_register_post(data):
     role = data.get('role')
     password = data.get('password')
 
-    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-    hashed_password = hashed.decode('utf-8')
-    logging.warning(type(hashed))
-    logging.warning(type(hashed_password))
-
-    # Add user
     try:
+        # Hash password
+        try:
+            hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+            hashed_password = hashed.decode('utf-8')
+            logging.warning(type(hashed))
+            logging.warning(type(hashed_password))
+        except Exception as e:
+            # Log hashing error
+            logging.error(f"Error while hashing password: {e}")
+            raise Exception("Password hashing error")
+
+        # Add user
         conn = db_connection()
         cur = conn.cursor()
-        cur.execute("INSERT INTO Users "
-                    "(firstname, lastname, email, password, phone, role) "
-                    "VALUES (%s, %s, %s, %s, %s, %s)",
-                    (firstname, lastname, email, hashed_password, phone, role))
-        conn.commit()
-        cur.close()
+        try:
+            cur.execute("INSERT INTO Users "
+                        "(firstname, lastname, email, password, phone, role) "
+                        "VALUES (%s, %s, %s, %s, %s, %s)",
+                        (firstname, lastname, email, hashed_password, phone,
+                         role))
+            conn.commit()
+            response_data = {'message': 'Registration successful'}
+            response_code = 201
 
-        response_data = {'message': 'Registration successful'}
-        response_code = 201
-    except psycopg2.Error as error:
-        response_data = {'error':
-                         'Registration error: ' + str(error)}
+        except psycopg2.Error as error:
+            conn.rollback()  # Rollback in case of database error
+            response_data = {'error': 'Registration error: ' + str(error)}
+            response_code = 500
+        finally:
+            cur.close()
+
+    except Exception as error:
+        # Handle other errors
+        response_data = {'error': str(error)}
         response_code = 500
+
     return response_data, response_code
 
 
