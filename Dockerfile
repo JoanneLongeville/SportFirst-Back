@@ -1,18 +1,21 @@
-# Utiliser l'image de base Python. Si manque de place, utiliser python:3.12-slim
-FROM python:3.12.0
+# Use the latest Python base image. If space is an issue, use python:3.12-slim
+FROM python:latest
 
-# Définir le répertoire de travail dans le conteneur
+# Set the working directory in the container
 WORKDIR /app
 
-# Copier le contenu actuel du répertoire local dans le répertoire de travail du conteneur
+# Copy the current directory contents into the container's working directory
 COPY . /app
 
-# Installer les dépendances de l'application Python avec pip
-RUN python -m pip install --upgrade pip --no-cache-dir -r requirements.txt
+# Upgrade setuptools, pip, and wheel
+RUN pip install --upgrade setuptools pip wheel
 
-# Exposer le port utilisé par l'application 
+# Install the application dependencies with pip
+RUN pip install -v --no-cache-dir -r requirements.txt
+
+# Expose the port used by the application
 EXPOSE 8080
 
-# Commande par défaut à exécuter lorsque le conteneur démarre
+# Default command to run when the container starts
 CMD ["python", "app/src/main.py"]
 
