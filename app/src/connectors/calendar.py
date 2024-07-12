@@ -63,11 +63,9 @@ def handle_reservation_post(data):
 
 
 # DELETE Reservation
-def handle_reservation_delete(data):
-    start_date_time = data.get('start')
-    end_date_time = data.get('end')
-    user_id = data.get('userId')
-    logging.warning("Delete reservation request: " + str(data))
+def handle_reservation_delete(start_date_time, end_date_time, user_id):
+    logging.warning("Delete reservation request: start={}, end={}, userId={}"
+                    .format(start_date_time, end_date_time, user_id))
 
     if not all([start_date_time, end_date_time, user_id]):
         return {'error': 'Missing data. Please provide start_date_time, '
@@ -96,6 +94,7 @@ def handle_reservation_delete(data):
         if not session_id:
             return {'error': 'No reservation found with the provided details.'
                     }, 404
+        session_id = session_id[0]  # Extract session_id from the tuple
 
         # Delete the reservation
         cur.execute("DELETE FROM Sessions WHERE session_id = %s",

@@ -42,8 +42,11 @@ class ReadResource(Resource):
 
 class DeleteReservation(Resource):
     def delete(self):
-        data = request.get_json()
-        response_data, response_code = handle_reservation_delete(data)
+        start_date_time = request.args.get('start')
+        end_date_time = request.args.get('end')
+        user_id = request.args.get('userId')
+        response_data, response_code = handle_reservation_delete(
+            start_date_time, end_date_time, user_id)
         return response_data, response_code
 
 
