@@ -3,7 +3,6 @@ Flask-RESTful # RESTful API
 psycopg2-binary # = psycopg2; connection to PostgreSQL
 sqlparse # PostgreSQL
 bcrypt # password hashing
-logging # logging
 pytest # testing
 gunicorn # render
 connectors # for pytest
