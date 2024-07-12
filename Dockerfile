@@ -14,7 +14,7 @@ RUN pip install --upgrade setuptools pip wheel
 RUN pip install -v --no-cache-dir -r requirements.txt
 
 # Expose the port used by the application
-EXPOSE 8080
+EXPOSE 5000
 
 # Default command to run when the container starts
 CMD ["python", "app/src/main.py"]
