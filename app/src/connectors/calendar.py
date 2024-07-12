@@ -62,6 +62,56 @@ def handle_reservation_post(data):
     return response_data, response_code
 
 
+# DELETE Reservation
+def handle_reservation_delete(data):
+    start_date_time = data.get('start')
+    end_date_time = data.get('end')
+    user_id = data.get('userId')
+    logging.warning("Delete reservation request: " + str(data))
+
+    if not all([start_date_time, end_date_time, user_id]):
+        return {'error': 'Missing data. Please provide start_date_time, '
+                'end_date_time, and userId.'}, 400
+
+    # Verify date format
+    try:
+        start_date_time = datetime.fromisoformat(start_date_time)
+        end_date_time = datetime.fromisoformat(end_date_time)
+    except ValueError as error:
+        return {'error': 'Date format error: ' + str(error)}, 400
+
+    # Delete reservation
+    try:
+        # Database connection
+        conn = db_connection()
+        cur = conn.cursor()
+
+        # Check if the reservation exists
+        cur.execute("SELECT session_id FROM Sessions "
+                    "WHERE start_date_time = %s AND end_date_time = %s "
+                    "AND user_id = %s",
+                    (start_date_time, end_date_time, user_id))
+        session_id = cur.fetchone()
+
+        if not session_id:
+            return {'error': 'No reservation found with the provided details.'
+                    }, 404
+
+        # Delete the reservation
+        cur.execute("DELETE FROM Sessions WHERE session_id = %s",
+                    (session_id,))
+        conn.commit()
+        cur.close()
+
+        response_data = {'message': 'Reservation successfully deleted'}
+        response_code = 200
+    except psycopg2.Error as error:
+        response_data = {'error': 'Deletion error: ' + str(error)}
+        response_code = 500
+
+    return response_data, response_code
+
+
 def main():
     print("welcome to SportFirst")
 
