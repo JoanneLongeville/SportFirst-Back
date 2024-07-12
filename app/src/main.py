@@ -10,6 +10,8 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@postgres:5432/sportfirst'
+
 
 class AccountResource(Resource):
     def post(self):
@@ -46,4 +48,4 @@ api.add_resource(ReservationRessource, '/reservations')
 
 if __name__ == "__main__":
     database.create_table()
-    app.run()
+    app.run(debug=True)
