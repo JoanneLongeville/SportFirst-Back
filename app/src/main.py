@@ -46,4 +46,4 @@ api.add_resource(ReservationRessource, '/reservations')
 
 if __name__ == "__main__":
     database.create_table()
-    app.run(debug=True)
+    app.run()
