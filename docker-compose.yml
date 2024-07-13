@@ -1,16 +1,16 @@
 version: '3.8'
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-    networks:
-      - mynetwork
+  # app:
+    # build:
+      # context: .
+      # dockerfile: Dockerfile
+    # ports:
+      # - "5000:5000"
+    # depends_on:
+      # - postgres
+    # networks:
+      # - mynetwork
 
   postgres:
     image: postgres:latest
@@ -23,9 +23,6 @@ services:
       - "5432:5432"
     networks:
       - mynetwork
-    # volumes:
-    # - SportFirstVolume:/var/lib/postgresql/data
-    # - ./scripts/init-db:/docker-entrypoint-initdb.d
 
   pgadmin:
     image: dpage/pgadmin4
@@ -40,7 +37,3 @@ services:
 
 networks:
   mynetwork:
-    # driver: bridge
-
-# volumes:
-#   SportFirstVolume: {}
