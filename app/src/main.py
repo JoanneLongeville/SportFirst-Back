@@ -3,7 +3,8 @@ from connectors.authentication import handle_register_post, handle_login_post
 from connectors.authentication import handle_profile_get
 from connectors.calendar import handle_reservation_post
 from connectors.calendar import handle_reservation_delete
-from flask import Flask, request
+from connectors.calendar import handle_reservations_get
+from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from flask_cors import CORS
 
@@ -40,6 +41,12 @@ class ReadResource(Resource):
         return response_data, response_code
 
 
+class ReadReservation(Resource):
+    def get(self):
+        response_data, response_code = handle_reservations_get()
+        return jsonify(response_data), response_code
+
+
 class DeleteReservation(Resource):
     def delete(self):
         start_date_time = request.args.get('start')
@@ -54,6 +61,7 @@ api.add_resource(AccountResource, '/accounts')
 api.add_resource(LoginRessource, '/login')
 api.add_resource(ReadResource, '/profile')
 api.add_resource(ReservationRessource, '/reservations')
+api.add_resource(ReadReservation, '/reservations')
 api.add_resource(DeleteReservation, '/reservations')
 
 if __name__ == "__main__":

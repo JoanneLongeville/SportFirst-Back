@@ -2,6 +2,7 @@ import psycopg2
 from .database import db_connection
 from datetime import datetime
 import logging
+from flask import jsonify
 
 
 # POST Reservation
@@ -62,10 +63,50 @@ def handle_reservation_post(data):
     return response_data, response_code
 
 
+# GET Reservations
+def handle_reservations_get():
+    try:
+        # Database connection
+        conn = db_connection()
+        cur = conn.cursor()
+
+        # Fetch reservations
+        cur.execute(
+            "SELECT user_id, start_date_time, end_date_time FROM Sessions")
+        reservations = cur.fetchall()
+        logging.warning("Reservations fetched: %s" + reservations)
+        # Format the data
+        reservations_data = []
+        for reservation in reservations:
+            user_id = reservation[0]
+            start_date_time = reservation[1].isoformat()
+            end_date_time = reservation[2].isoformat()
+
+            reservations_data.append({
+                'userId': user_id,
+                'start': start_date_time,
+                'end': end_date_time,
+                'isScheduled': True
+            })
+
+        cur.close()
+        # logging.warning("Fetching reservations request: %s",
+        #  type(reservations_data), str(reservations_data))
+        # logging.warning("Jsonify:", type(reservations_data),
+        #  jsonify(str(reservations_data)))
+        return jsonify(reservations_data), 200
+
+    except psycopg2.Error as error:
+        response_data = {'error': 'Error fetching reservations: ' + str(error)}
+        response_code = 500
+
+    return jsonify(response_data), response_code
+
+
 # DELETE Reservation
 def handle_reservation_delete(start_date_time, end_date_time, user_id):
-    logging.warning("Delete reservation request: start={}, end={}, userId={}"
-                    .format(start_date_time, end_date_time, user_id))
+    # logging.warning("Delete reservation request: start={}, end={}, userId={}"
+    # .format(start_date_time, end_date_time, user_id))
 
     if not all([start_date_time, end_date_time, user_id]):
         return {'error': 'Missing data. Please provide start_date_time, '
