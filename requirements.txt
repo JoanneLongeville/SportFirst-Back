@@ -1,8 +1,0 @@
-Flask # web framework
-Flask-RESTful # RESTful API
-Flask-cors # cross-origin resource sharing
-psycopg2-binary # = psycopg2; connection to PostgreSQL
-sqlparse # PostgreSQL
-bcrypt # password hashing
-pytest # testing
-connectors # for pytest
