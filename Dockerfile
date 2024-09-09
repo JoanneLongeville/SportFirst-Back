@@ -1,21 +1,22 @@
-# Use the latest Python base image. If space is an issue, use python:3.12-slim
-FROM python:latest
+# Utilisation de l'image de base Go
+FROM golang:latest
 
-# Set the working directory in the container
+# Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copy the current directory contents into the container's working directory
-COPY . /app
+# Copier les fichiers go.mod et go.sum (si existants) et télécharger les dépendances
+COPY go.mod go.sum ./
+RUN go mod download
 
-# Upgrade setuptools, pip, and wheel
-RUN pip install --upgrade setuptools pip wheel
+# Copier le reste des fichiers du projet
+COPY . .
 
-# Install the application dependencies with pip
-RUN pip install -v --no-cache-dir -r requirements.txt
+# Compiler l'application
+RUN go build -o main ./cmd/...
 
-# Expose the port used by the application
-EXPOSE 5000
+# Exposer le port utilisé par l'application (si nécessaire)
+EXPOSE 8080
 
-# Default command to run when the container starts
-CMD ["python", "app/src/main.py"]
+# Lancer l'application en utilisant le fichier de configuration YAML
+CMD ["./main", "-config=config.yaml"]
 

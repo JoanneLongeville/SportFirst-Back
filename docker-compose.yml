@@ -1,39 +1,63 @@
 version: '3.8'
 
 services:
-  # app:
-    # build:
-      # context: .
-      # dockerfile: Dockerfile
-    # ports:
-      # - "5000:5000"
-    # depends_on:
-      # - postgres
-    # networks:
-      # - mynetwork
-
   postgres:
-    image: postgres:latest
-    restart: always
+    image: postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
+      POSTGRES_PASSWORD: angela
       POSTGRES_DB: sportfirst
     ports:
       - "5432:5432"
+    volumes:
+      - SportFirstVolume:/var/lib/postgresql/data
+      - ./scripts/init-db:/docker-entrypoint-initdb.d
+    restart: always
     networks:
       - mynetwork
 
   pgadmin:
     image: dpage/pgadmin4
-    restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@sportfirst.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_PASSWORD: angela
     ports:
       - "8081:80"
     networks:
       - mynetwork
 
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    ports:
+      - "8083:8080"
+    environment:
+      - SWAGGER_JSON=/docs/openapi.yaml
+    volumes:
+      - ./openapi.yaml:/docs/openapi.yaml
+    networks:
+      - mynetwork
+
+  goapp:
+    build: .
+    ports:
+      - "8082:8080"
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    networks:
+      - mynetwork
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - mynetwork
+
 networks:
   mynetwork:
+
+volumes:
+  SportFirstVolume: {}
